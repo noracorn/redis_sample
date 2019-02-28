@@ -2,6 +2,9 @@
   "dependencies": {
     "ioredis": "^4.6.2"
   },
+  "scripts": {
+    "start": "node index.js"
+  },
   "name": "redis_sample",
   "version": "1.0.0",
   "main": "index.js",
