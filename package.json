@@ -1,5 +1,11 @@
 {
   "dependencies": {
     "ioredis": "^4.6.2"
-  }
+  },
+  "name": "redis_sample",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/noracorn/redis_sample.git",
+  "author": "noracorn <noracorn@gmail.com>",
+  "license": "MIT"
 }
