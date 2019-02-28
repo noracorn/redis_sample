@@ -12,9 +12,9 @@ const listener = (req, res) => {
 	  });
 	}
 
-    if(path.indexOf('/otameshi/') == 0) {
+    if(path.indexOf('/otameshi/') == 0 && req.method === 'GET') {
         console.log('GET');
-        console.log('param = %s', param['frontend']);
+        console.log('param = %s', param['otameshitext']);
         fs.readFile('./htdocs/otameshi/index.html', 'utf-8', function (error, data) {
             res.writeHead(200, {'Content-Type' : 'text/html'});
             res.write(data);
@@ -22,6 +22,31 @@ const listener = (req, res) => {
         });
         return;
     }
+
+    if(path.indexOf('/otameshi/') == 0 && req.method === 'POST') {
+        console.log('POST');
+        const querystring = require('querystring');
+
+        var data = '';
+        req.on('readable', function(chunk) {
+            var chunk = req.read();
+            if(chunk != null) {
+                data += chunk;
+            }
+        });
+        req.on('end', function() {
+            const param = querystring.parse(data);
+            console.log(data);
+        });
+
+        fs.readFile('./htdocs/otameshi/index.html', 'utf-8', function (error, data) {
+            res.writeHead(200, {'Content-Type' : 'text/html'});
+            res.write(data);
+            res.end();
+        });
+        return;
+    }
+    
     console.log("-> Not Found");
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     res.write('Not Found!');
