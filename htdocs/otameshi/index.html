@@ -4,8 +4,13 @@
         <title>おためし</title>
     </head>
     <body>
-        <form action="" method="POST">
-            <input type="text" name="otameshitext" value="abc"/>
+        <form action="redis_put" method="POST">
+            登録key<input type="text" name="redis_key" value="foo"/><br/>
+            value<input type="text" name="redis_value" value="bar"/><br/>
+            <input type="submit" value="送信"/>
+        </form>
+        <form action="redis_get" method="POST">
+            取得key<input type="text" name="redis_key" value="foo"/><br/>
             <input type="submit" value="送信"/>
         </form>
     </body>
