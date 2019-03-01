@@ -42,6 +42,36 @@ const listener = (req, res) => {
         return;
     }
 
+    if(path.indexOf('/otameshi/redis_del') == 0 && req.method === 'POST') {
+        console.log('redis del POST');
+        const querystring = require('querystring');
+
+        var data = '';
+        req.on('readable', function(chunk) {
+            var chunk = req.read();
+            if(chunk != null) {
+                data += chunk;
+            }
+        });
+        req.on('end', function() {
+            const param = querystring.parse(data);
+            console.log(data);
+
+            const Redis = require('ioredis');
+            const {promisify} = require('util');
+            const redis = require("ioredis");
+            const client = redis.createClient();
+            client.del(param['redis_key']);
+        });
+
+        fs.readFile('./htdocs/otameshi/index.html', 'utf-8', function (error, data) {
+            res.writeHead(200, {'Content-Type' : 'text/html'});
+            res.write(data);
+            res.end();
+        });
+        return;
+    }
+
     if(path.indexOf('/otameshi/redis_get') == 0 && req.method === 'POST') {
         console.log('redis get POST');
         const querystring = require('querystring');
