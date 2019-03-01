@@ -26,6 +26,12 @@ const listener = (req, res) => {
         req.on('end', function() {
             const param = querystring.parse(data);
             console.log(data);
+
+            const Redis = require('ioredis');
+            const {promisify} = require('util');
+            const redis = require("ioredis");
+            const client = redis.createClient();
+            client.set(param['redis_key'], new Buffer(param['redis_value']));
         });
 
         fs.readFile('./htdocs/otameshi/index.html', 'utf-8', function (error, data) {
@@ -42,16 +48,28 @@ const listener = (req, res) => {
 
         var data = '';
         req.on('readable', function(chunk) {
+            // POSTデータ作成開始
             var chunk = req.read();
             if(chunk != null) {
                 data += chunk;
             }
         });
         req.on('end', function() {
+            // POSTデータ作成終了
             const param = querystring.parse(data);
-            console.log(data);
-        });
+            console.log("param = %s", data);
 
+            const Redis = require('ioredis');
+            const {promisify} = require('util');
+            const redis = require("ioredis");
+            const client = redis.createClient();
+            const getAsync = promisify(client.get).bind(client);
+            (async () => {
+                // Redisからデータ取得
+                const res = await getAsync(param['redis_key']);
+                console.log('key %s = %s', param['redis_key'], res);
+            })();
+        });
         fs.readFile('./htdocs/otameshi/index.html', 'utf-8', function (error, data) {
             res.writeHead(200, {'Content-Type' : 'text/html'});
             res.write(data);
